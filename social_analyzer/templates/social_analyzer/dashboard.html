@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Sentiment Monitor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans p-8">
+
+    <div class="container mx-auto p-6 bg-white rounded-lg shadow-xl">
+        <h1 class="text-3xl font-bold mb-6 text-center text-blue-800">Social Media Sentiment Dashboard</h1>
+
+        <div class="mb-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
+            <form action="{% url 'dashboard' %}" method="get" class="w-full md:w-1/2 flex space-x-2">
+                <input type="text" name="q" placeholder="Search posts..." value="{{ search_query }}"
+                       class="flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                <select name="sentiment" class="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <option value="">All Sentiments</option>
+                    <option value="positive" {% if selected_sentiment == 'positive' %}selected{% endif %}>Positive</option>
+                    <option value="negative" {% if selected_sentiment == 'negative' %}selected{% endif %}>Negative</option>
+                    <option value="neutral" {% if selected_sentiment == 'neutral' %}selected{% endif %}>Neutral</option>
+                </select>
+                <select name="emotion" class="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <option value="">All Emotions</option>
+                    {% for emotion in emotions %}
+                        <option value="{{ emotion }}" {% if selected_emotion == emotion %}selected{% endif %}>{{ emotion|capfirst }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">Filter</button>
+            </form>
+            <a href="{% url 'admin:social_analyzer_trackedkeyword_changelist' %}" target="_blank"
+               class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300">Manage Keywords</a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="bg-gray-50 p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-semibold mb-4 text-center">Overall Sentiment Distribution</h2>
+                <div class="w-full h-80 flex items-center justify-center">
+                    <canvas id="sentimentPieChart" class="max-h-full max-w-full"></canvas>
+                </div>
+            </div>
+            <div class="bg-gray-50 p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-semibold mb-4 text-center">Sentiment Bar Chart</h2>
+                <div class="w-full h-80 flex items-center justify-center">
+                    <canvas id="sentimentBarChart" class="max-h-full max-w-full"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Posts matching your filter</h2>
+            <div class="space-y-4">
+                {% if posts %}
+                    {% for post in posts %}
+                        <div class="p-4 bg-gray-50 border rounded-md shadow-sm">
+                            <h3 class="font-bold text-gray-900">{{ post.title }}</h3>
+                            <p class="text-gray-800 mt-1">{{ post.description }}</p>
+                            <div class="mt-2 text-sm text-gray-500 flex flex-wrap gap-x-4">
+                                <div>
+                                    <span class="font-bold">Sentiment:</span> <span class="
+                                        {% if post.sentiment_label == 'positive' %}text-green-600
+                                        {% elif post.sentiment_label == 'negative' %}text-red-600
+                                        {% else %}text-yellow-600{% endif %}">
+                                        {{ post.sentiment_label|capfirst }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="font-bold">Emotion:</span> <span class="text-gray-700">
+                                        {{ post.emotion_label|capfirst }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="font-bold">Date:</span> <span>{{ post.timestamp|date:"M d, Y" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-gray-500">No posts found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/sentiment-data/')
+            .then(response => response.json())
+            .then(data => {
+                const pieChartData = data.sentiment_pie_chart;
+                const barChartData = data.sentiment_bar_chart;
+                
+                const backgroundColors = ['#28a745', '#dc3545', '#ffc107']; // Positive, Negative, Neutral
+
+                new Chart(document.getElementById('sentimentPieChart').getContext('2d'), {
+                    type: 'pie',
+                    data: {
+                        labels: pieChartData.labels,
+                        datasets: [{
+                            data: pieChartData.data,
+                            backgroundColor: backgroundColors,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    }
+                });
+
+                new Chart(document.getElementById('sentimentBarChart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: barChartData.labels,
+                        datasets: [{
+                            label: 'Number of Posts',
+                            data: barChartData.data,
+                            backgroundColor: backgroundColors,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { 
+                            y: { 
+                                beginAtZero: true, 
+                                title: { display: true, text: 'Number of Posts' }
+                            },
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        });
+    </script>
+</body>
+</html>

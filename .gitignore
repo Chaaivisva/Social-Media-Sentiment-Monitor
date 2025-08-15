@@ -1,0 +1,28 @@
+Python virtual environment
+.venv/
+venv/
+env/
+
+Byte-compiled / optimized / DLL files
+pycache/
+*.pyc
+*$py.class
+
+Django project files
+db.sqlite3
+*.log
+*.pot
+
+Celery
+celerybeat-schedule.db
+celerybeat-schedule
+celeryd-*.pid
+
+Django media files
+/media/
+
+IDE files (e.g., VS Code)
+.vscode/
+
+Environment variables
+.env
