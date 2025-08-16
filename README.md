@@ -5,7 +5,8 @@ This project is a full-stack web application built with Python and Django that m
 ---
 
 ### Architecture Diagram
-![Uploading Gemini_Generated_Image_6lgr326lgr326lgr.png…]()
+<img width="2048" height="2048" alt="Gemini_Generated_Image_6lgr326lgr326lgr" src="https://github.com/user-attachments/assets/172876d9-f036-4f83-a9d4-0c7172817698" />
+
 
 ### Key Features
 
