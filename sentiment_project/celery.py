@@ -10,8 +10,8 @@ app.autodiscover_tasks()
 
 
 app.conf.beat_schedule = {
-    'fetch-data-twice-daily': {
+    'fetch-data-on-startup-and-every-hour': {
         'task': 'social_analyzer.tasks.fetch_data_task',
-        'schedule': crontab(minute='0', hour='0,12'),
+        'schedule': crontab(minute='0'),
     },
 }
