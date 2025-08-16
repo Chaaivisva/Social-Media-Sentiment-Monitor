@@ -4,6 +4,9 @@ This project is a full-stack web application built with Python and Django that m
 
 ---
 
+### Architecture Diagram
+![Uploading Gemini_Generated_Image_6lgr326lgr326lgr.png…]()
+
 ### Key Features
 
 * **Automated Data Pipeline:** A scheduled background task, powered by Celery and Redis, automatically fetches new social media posts at regular intervals, ensuring the data is always fresh.
