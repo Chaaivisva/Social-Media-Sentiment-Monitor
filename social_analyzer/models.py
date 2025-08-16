@@ -22,3 +22,20 @@ class TrackedKeyword(models.Model):
     def __str__(self):
         return self.keyword
     
+class AlertSettings(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    keyword = models.ForeignKey(TrackedKeyword, on_delete=models.CASCADE)
+    threshold = models.FloatField(default = 0.7)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Alert for {self.keyword.keyword} by {self.user.username}"
+    
+class SavedReport(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    report_data = models.TextField()
+
+    def __str__(self):
+        return f"{self.name} by {self.user.username}"

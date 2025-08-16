@@ -16,13 +16,14 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("No active keywords found. Skipping data fetch."))
             return
 
+        # query = " OR ".join(keywords) + " -is:retweet lang:en"
         query = "DjangoProject -is:retweet lang:en"
 
         try:
             client = tweepy.Client(settings.TWITTER_BEARER_TOKEN)
             response = client.search_recent_tweets(
                 query=query, 
-                max_results=5, 
+                max_results=10, 
                 expansions=['author_id'],
                 tweet_fields=['text'],
                 user_fields=['username']

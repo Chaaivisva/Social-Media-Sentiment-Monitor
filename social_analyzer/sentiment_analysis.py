@@ -36,8 +36,11 @@ def analyze_emotion(text):
 def get_topic_model(texts, num_topics=3, num_words=5):
     if not texts:
         return []
-    
-    vectorizer = TfidfVectorizer(max_df=0.95, min_df=2, stop_words='english')
+    if len(texts) < 10:
+        vectorizer = TfidfVectorizer(stop_words='english')
+    else:
+        vectorizer = TfidfVectorizer(max_df=0.95, min_df=2, stop_words='english')
+
     tfidf = vectorizer.fit_transform(texts)
 
     lda_model = LatentDirichletAllocation(n_components=num_topics, max_iter=5, learning_method='online', random_state=0)

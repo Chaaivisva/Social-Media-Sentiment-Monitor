@@ -12,7 +12,21 @@
 <body class="bg-gray-100 text-gray-900 font-sans p-8">
 
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-xl">
-        <h1 class="text-3xl font-bold mb-6 text-center text-blue-800">Social Media Sentiment Dashboard</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-blue-800">Social Media Sentiment Dashboard</h1>
+            <div class="space-x-4">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'view-reports' %}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300">View Saved Reports</a>
+                   <form action="{% url 'logout' %}" method="post" class="inline-block">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300">Login</a>
+                    <a href="{% url 'register' %}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">Register</a>
+                {% endif %}
+            </div>
+        </div>
 
         <div class="mb-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
             <form action="{% url 'dashboard' %}" method="get" class="w-full md:w-1/2 flex space-x-2">
@@ -34,6 +48,14 @@
             </form>
             <a href="{% url 'admin:social_analyzer_trackedkeyword_changelist' %}" target="_blank"
                class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300">Manage Keywords</a>
+            
+            {% if user.is_authenticated %}
+                <form action="{% url 'save-report' %}?q={{ search_query }}&sentiment={{ selected_sentiment }}&emotion={{ selected_emotion }}" method="post" class="inline-block">
+                    {% csrf_token %}
+                    <input type="text" name="report_name" placeholder="Enter Report Name" class="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-300">
+                    <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition duration-300">Save Report</button>
+                </form>
+            {% endif %}
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">

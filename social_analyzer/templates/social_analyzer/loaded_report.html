@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Report: {{ report_name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans p-8">
+    <div class="container mx-auto p-6 bg-white rounded-lg shadow-xl">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-blue-800">Saved Report: {{ report_name }}</h1>
+            <a href="{% url 'view-reports' %}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300">Back to Reports</a>
+        </div>
+        
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Report Details</h2>
+            <div class="space-y-4">
+                {% if posts %}
+                    {% for post in posts %}
+                        <div class="p-4 bg-gray-50 border rounded-md shadow-sm">
+                            <h3 class="font-bold text-gray-900">{{ post.title }}</h3>
+                            <p class="text-gray-800 mt-1">{{ post.description }}</p>
+                            <div class="mt-2 text-sm text-gray-500 flex flex-wrap gap-x-4">
+                                <div>
+                                    <span class="font-bold">Sentiment:</span> <span class="
+                                        {% if post.sentiment_label == 'positive' %}text-green-600
+                                        {% elif post.sentiment_label == 'negative' %}text-red-600
+                                        {% else %}text-yellow-600{% endif %}">
+                                        {{ post.sentiment_label|capfirst }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="font-bold">Emotion:</span> <span class="text-gray-700">
+                                        {{ post.emotion_label|capfirst }}
+                                    </span>
+                                </div>
+                                <!-- <div>
+                                    <span class="font-bold">Date:</span> <span>{{ post.timestamp|date:"M d, Y" }}</span>
+                                </div> -->
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-gray-500">This report has no posts.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
