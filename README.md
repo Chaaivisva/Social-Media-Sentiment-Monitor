@@ -82,4 +82,4 @@ To set up and run this project locally, follow these steps.
 The application will now be running at `http://127.0.0.1:8000`. You can add keywords and manage settings from the admin panel at `http://127.0.0.1:8000/admin/`.
 
 
-Working Model  - [https://www.loom.com/share/6274a7f94f284e33833037619bfb4841?t=174&sid=b5a5ca83-2d88-49e5-92bb-fa5b8e631394] (https://www.loom.com/share/6274a7f94f284e33833037619bfb4841?t=174&sid=b5a5ca83-2d88-49e5-92bb-fa5b8e631394)
+Working Model  - [https://www.loom.com/share/6274a7f94f284e33833037619bfb4841?t=174&sid=b5a5ca83-2d88-49e5-92bb-fa5b8e631394]
