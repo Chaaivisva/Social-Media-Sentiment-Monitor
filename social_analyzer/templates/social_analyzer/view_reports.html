@@ -5,27 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saved Reports</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans p-8">
-    <div class="container mx-auto p-6 bg-white rounded-lg shadow-xl">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-blue-800">My Saved Reports</h1>
-            <a href="{% url 'dashboard' %}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300">Back to Dashboard</a>
+<body class="bg-slate-50 text-slate-800 font-sans p-4 sm:p-8">
+
+    <div class="container mx-auto p-6 bg-white rounded-xl shadow-lg">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 border-b border-slate-200 pb-4">
+            <h1 class="text-3xl font-bold text-blue-700 text-center sm:text-left mb-4 sm:mb-0">My Saved Reports</h1>
+            <a href="{% url 'dashboard' %}" class="flex items-center space-x-2 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition duration-300 font-semibold text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                </svg>
+                <span>Back to Dashboard</span>
+            </a>
         </div>
         
         <div class="space-y-4">
             {% if reports %}
                 {% for report in reports %}
-                    <div class="p-4 bg-gray-50 border rounded-md shadow-sm flex justify-between items-center">
-                        <div>
-                            <h3 class="font-bold text-gray-900">{{ report.name }}</h3>
-                            <p class="text-gray-600 text-sm">Saved on {{ report.created_at|date:"M d, Y H:i" }}</p>
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center transition duration-300 hover:shadow-md hover:bg-white">
+                        <div class="mb-3 sm:mb-0">
+                            <h3 class="font-bold text-xl text-slate-900">{{ report.name }}</h3>
+                            <p class="text-slate-600 text-sm mt-1">Saved on <span class="font-medium">{{ report.created_at|date:"M d, Y" }}</span> at <span class="font-medium">{{ report.created_at|time:"H:i" }}</span></p>
                         </div>
-                        <a href="{% url 'load-report' report.id %}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">View Report</a>
+                        <a href="{% url 'load-report' report.id %}" class="flex items-center space-x-2 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 font-semibold whitespace-nowrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.575 3.01 9.963 7.183a1.012 1.012 0 010 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.575-3.01-9.963-7.183z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>View Report</span>
+                        </a>
                     </div>
                 {% endfor %}
             {% else %}
-                <p class="text-center text-gray-500">You have no saved reports yet.</p>
+                <div class="text-center text-slate-500 py-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-slate-400 mx-auto mb-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9.75 15.975a3.75 3.75 0 00-4.862 0L3 17.25m0 0l1.5-1.5m-1.5 1.5l1.5 1.5m12.987-2.25l-.75-.75L12 11.25m-3 9.75l.75.75m3-15l-.75-.75m0 0l-1.5-1.5M12 21.75l-3-3M15 12a3 3 0 11-6 0 3 3 0 016 0zm-1-6.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+                    </svg>
+                    <p class="text-lg font-medium">You have no saved reports yet.</p>
+                    <p class="mt-2 text-sm">Head back to the dashboard to start analyzing and saving reports.</p>
+                </div>
             {% endif %}
         </div>
     </div>

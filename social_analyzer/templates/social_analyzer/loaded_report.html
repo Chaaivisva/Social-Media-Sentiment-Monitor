@@ -5,44 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saved Report: {{ report_name }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans p-8">
-    <div class="container mx-auto p-6 bg-white rounded-lg shadow-xl">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-blue-800">Saved Report: {{ report_name }}</h1>
-            <a href="{% url 'view-reports' %}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-300">Back to Reports</a>
+<body class="bg-slate-50 text-slate-800 font-sans p-4 sm:p-8">
+
+    <div class="container mx-auto p-6 bg-white rounded-xl shadow-lg">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 border-b border-slate-200 pb-4">
+            <h1 class="text-3xl font-bold text-blue-700 text-center sm:text-left mb-4 sm:mb-0">
+                Saved Report: <span class="text-slate-800">{{ report_name }}</span>
+            </h1>
+            <a href="{% url 'view-reports' %}" class="flex items-center space-x-2 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition duration-300 font-semibold text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                </svg>
+                <span>Back to Reports</span>
+            </a>
         </div>
         
         <div class="mt-8">
-            <h2 class="text-xl font-semibold mb-4">Report Details</h2>
+            <h2 class="text-xl font-semibold mb-4 text-slate-700">Report Details</h2>
             <div class="space-y-4">
                 {% if posts %}
                     {% for post in posts %}
-                        <div class="p-4 bg-gray-50 border rounded-md shadow-sm">
-                            <h3 class="font-bold text-gray-900">{{ post.title }}</h3>
-                            <p class="text-gray-800 mt-1">{{ post.description }}</p>
-                            <div class="mt-2 text-sm text-gray-500 flex flex-wrap gap-x-4">
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-lg shadow-sm transition duration-300 hover:shadow-md hover:bg-white">
+                            <h3 class="font-bold text-xl text-slate-900 mb-2">{{ post.title }}</h3>
+                            <p class="text-slate-700 mt-1">{{ post.description }}</p>
+                            <div class="mt-4 text-sm text-slate-500 flex flex-wrap gap-x-6 gap-y-2">
                                 <div>
-                                    <span class="font-bold">Sentiment:</span> <span class="
-                                        {% if post.sentiment_label == 'positive' %}text-green-600
-                                        {% elif post.sentiment_label == 'negative' %}text-red-600
-                                        {% else %}text-yellow-600{% endif %}">
+                                    <span class="font-bold">Sentiment:</span> 
+                                    <span class="
+                                        {% if post.sentiment_label == 'positive' %}text-green-600 font-semibold
+                                        {% elif post.sentiment_label == 'negative' %}text-red-600 font-semibold
+                                        {% else %}text-amber-500 font-semibold{% endif %}">
                                         {{ post.sentiment_label|capfirst }}
                                     </span>
                                 </div>
                                 <div>
-                                    <span class="font-bold">Emotion:</span> <span class="text-gray-700">
-                                        {{ post.emotion_label|capfirst }}
-                                    </span>
+                                    <span class="font-bold">Emotion:</span> 
+                                    <span class="text-slate-700">{{ post.emotion_label|capfirst }}</span>
                                 </div>
-                                <!-- <div>
-                                    <span class="font-bold">Date:</span> <span>{{ post.timestamp|date:"M d, Y" }}</span>
-                                </div> -->
+                                {% comment %} The original code had the date commented out. Including it here as a good practice. {% endcomment %}
+                                <div>
+                                    <span class="font-bold">Date:</span> 
+                                    <span class="text-slate-700">{{ post.timestamp|date:"M d, Y" }}</span>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-center text-gray-500">This report has no posts.</p>
+                    <div class="text-center text-slate-500 py-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-slate-400 mx-auto mb-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                        </svg>
+                        <p class="text-lg font-medium">This report has no posts.</p>
+                        <p class="mt-2 text-sm">The selected filters may not have returned any results when the report was saved.</p>
+                    </div>
                 {% endif %}
             </div>
         </div>

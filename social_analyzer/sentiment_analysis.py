@@ -1,38 +1,34 @@
 from transformers import pipeline
+import numpy as np
+import torch
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
-import torch
-import numpy as np
 
-
-sentiment_pipeline = pipeline('sentiment-analysis', model = "distilbert-base-uncased-finetuned-sst-2-english")
+sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
 emotion_pipeline = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base")
 
-def analyze_sentiment(text):    
+def analyze_sentiment(text):
     try:
-        result = sentiment_pipeline(text)[0]
+        result = sentiment_pipeline(text, truncation=True)[0]
         label = result['label'].lower()
         score = result['score']
-
         if score < 0.8:
             return 'neutral', 0.0
-        
         return label, score
     except Exception as e:
         print(f"Sentiment analysis failed for text: '{text}'. Error: {e}")
-        return 'netural', 0.0
-    
+        return 'neutral', 0.0
 
 def analyze_emotion(text):
     try:
-        result = emotion_pipeline(text)[0]
+        result = emotion_pipeline(text, truncation=True)[0]
         label = result['label'].lower()
         score = result['score']
         return label, score
     except Exception as e:
         print(f"Emotion analysis failed for text: '{text}'. Error: {e}")
         return 'unknown', 0.0
-    
+
 def get_topic_model(texts, num_topics=3, num_words=5):
     if not texts:
         return []
