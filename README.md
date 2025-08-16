@@ -83,3 +83,9 @@ The application will now be running at `http://127.0.0.1:8000`. You can add keyw
 
 
 Working Model  - [https://www.loom.com/share/6274a7f94f284e33833037619bfb4841?t=174&sid=b5a5ca83-2d88-49e5-92bb-fa5b8e631394]
+
+
+### USING DOCKER
+
+    * Run the command docker-compose up --build -d
+    * Run the container, If there is No data there Apply this command [docker-compose exec web python manage.py fetch_data].
